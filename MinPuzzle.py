@@ -8,7 +8,8 @@ def minEffort(puzzle):
     cols = len(puzzle[0])
     queue = [(0, 0, 0)]
     effort = None
-    neighbors = [(0, 1), (1, 0)]
+    neighbors = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    visited = [[0] * cols for _ in range(rows)]
     while len(queue) > 0:
         curr_row, curr_col, cur_effort = queue.pop(0)
         if curr_row == rows - 1 and curr_col == cols - 1:
@@ -17,8 +18,9 @@ def minEffort(puzzle):
             else:
                 min(cur_effort, effort)
         for i, j in neighbors:
-            if curr_row + i < rows and curr_col + j < cols:
-                queue.append((curr_row + i, curr_col + j, max(cur_effort, abs(puzzle[curr_row][curr_col] -
-                                                                              puzzle[curr_row + i][curr_col + j]))))
+            if 0 <= curr_row + i < rows and 0 <= curr_col + j < cols and visited[curr_row + i][curr_col + j] == 0:
+                new_effort = max(cur_effort, abs(puzzle[curr_row][curr_col] - puzzle[curr_row + i][curr_col + j]))
+                queue.append((curr_row + i, curr_col + j, new_effort))
+                visited[curr_row + i][curr_col + j] = 1
     return effort
 
